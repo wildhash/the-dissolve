@@ -4,6 +4,7 @@ import { AudioEngine } from './AudioEngine.js';
 import { ShaderEffects } from './ShaderEffects.js';
 import { FractalGeometry } from './FractalGeometry.js';
 import { TripPhaseManager } from './TripPhaseManager.js';
+import { MouseControls } from './MouseControls.js';
 
 class TheDissolve {
     constructor() {
@@ -16,9 +17,11 @@ class TheDissolve {
         this.shaderEffects = null;
         this.fractalGeometry = null;
         this.phaseManager = null;
+        this.mouseControls = null;
         this.isRunning = false;
         this.handTrails = [];
         this.emergencyStop = false;
+        this.demoMode = false;
     }
 
     async init() {
@@ -47,6 +50,7 @@ class TheDissolve {
 
         // Initialize subsystems
         this.handTracking = new HandTracking(this.scene, this.camera);
+        this.mouseControls = new MouseControls();
         this.audioEngine = new AudioEngine();
         this.shaderEffects = new ShaderEffects(this.scene, this.renderer);
         this.fractalGeometry = new FractalGeometry(this.scene);
@@ -187,13 +191,17 @@ class TheDissolve {
             }
 
             // Update hand tracking
+            let handData = null;
             if (frame) {
-                const handData = this.handTracking.update(frame);
-                
-                // Update effects based on hand gestures
-                if (handData) {
-                    this.updateEffectsFromHands(handData, phase);
-                }
+                handData = this.handTracking.update(frame);
+            } else if (this.demoMode) {
+                // Use mouse controls in demo mode
+                handData = this.mouseControls.getHandData();
+            }
+            
+            // Update effects based on hand gestures
+            if (handData) {
+                this.updateEffectsFromHands(handData, phase);
             }
 
             // Update audio based on phase
@@ -302,8 +310,21 @@ document.getElementById('accept-btn').addEventListener('click', async () => {
     const app = new TheDissolve();
     await app.init();
     
-    // For non-VR testing, start immediately
+    // For non-VR testing, start immediately in demo mode
     if (!navigator.xr) {
+        app.demoMode = true;
         app.start();
+        console.log('Running in demo mode (desktop). Use mouse to control effects.');
+        console.log('Left click: Pinch gesture (intensity)');
+        console.log('Right click: Open palm (spread)');
+        
+        // Show demo controls
+        document.getElementById('vr-controls').style.display = 'none';
+        document.getElementById('vr-controls2').style.display = 'none';
+        document.getElementById('vr-controls3').style.display = 'none';
+        document.getElementById('vr-controls4').style.display = 'none';
+        document.getElementById('demo-controls').style.display = 'block';
+        document.getElementById('demo-controls2').style.display = 'block';
+        document.getElementById('demo-controls3').style.display = 'block';
     }
 });
