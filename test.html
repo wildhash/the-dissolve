@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dissolve - Feature Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #f0f;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #0f0;
+            border-radius: 5px;
+        }
+        .test-section h2 {
+            color: #0ff;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+        .status.pass {
+            background: #0a0;
+            color: #fff;
+        }
+        .status.fail {
+            background: #a00;
+            color: #fff;
+        }
+        .status.info {
+            background: #00a;
+            color: #fff;
+        }
+        button {
+            background: #f0f;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #f5f;
+        }
+        #log {
+            background: #111;
+            padding: 10px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #0f0;
+        }
+        .log-entry {
+            margin: 2px 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌀 The Dissolve - Feature Test 🌀</h1>
+    
+    <div class="test-section">
+        <h2>1. Module Loading</h2>
+        <p>Testing if all modules can be imported...</p>
+        <div id="modules-status">Testing...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. WebXR Support</h2>
+        <p>Checking WebXR API availability...</p>
+        <div id="webxr-status">Testing...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Audio Context</h2>
+        <p>Testing Web Audio API...</p>
+        <div id="audio-status">Testing...</div>
+        <button id="test-audio">Test Audio</button>
+    </div>
+
+    <div class="test-section">
+        <h2>4. WebGL / Three.js</h2>
+        <p>Testing 3D rendering capabilities...</p>
+        <div id="webgl-status">Testing...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Hand Tracking API</h2>
+        <p>Checking hand tracking support...</p>
+        <div id="handtracking-status">Testing...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Actions</h2>
+        <button onclick="window.location.href='/'">Launch The Dissolve</button>
+        <button onclick="runAllTests()">Re-run Tests</button>
+    </div>
+
+    <div id="log">
+        <strong>Test Log:</strong>
+        <div id="log-entries"></div>
+    </div>
+
+    <script type="module">
+        function log(message, type = 'info') {
+            const logEntries = document.getElementById('log-entries');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.style.color = type === 'error' ? '#f00' : type === 'success' ? '#0f0' : '#fff';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEntries.appendChild(entry);
+            logEntries.scrollTop = logEntries.scrollHeight;
+        }
+
+        function setStatus(elementId, message, status) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `${message} <span class="status ${status}">${status.toUpperCase()}</span>`;
+        }
+
+        async function testModules() {
+            log('Testing module imports...');
+            try {
+                const THREE = await import('three');
+                log('✓ Three.js loaded', 'success');
+                setStatus('modules-status', 'All modules loaded successfully', 'pass');
+                return true;
+            } catch (error) {
+                log(`✗ Module loading failed: ${error.message}`, 'error');
+                setStatus('modules-status', 'Module loading failed', 'fail');
+                return false;
+            }
+        }
+
+        async function testWebXR() {
+            log('Testing WebXR support...');
+            if ('xr' in navigator) {
+                try {
+                    const supported = await navigator.xr.isSessionSupported('immersive-vr');
+                    if (supported) {
+                        log('✓ WebXR immersive-vr supported', 'success');
+                        setStatus('webxr-status', 'WebXR is fully supported', 'pass');
+                    } else {
+                        log('⚠ WebXR API available but immersive-vr not supported');
+                        setStatus('webxr-status', 'WebXR available but VR not supported (OK for desktop)', 'info');
+                    }
+                } catch (error) {
+                    log(`⚠ WebXR check failed: ${error.message}`);
+                    setStatus('webxr-status', 'WebXR check failed', 'info');
+                }
+            } else {
+                log('⚠ WebXR API not available (expected on desktop)');
+                setStatus('webxr-status', 'Not available (use Quest 3 for full experience)', 'info');
+            }
+        }
+
+        async function testAudio() {
+            log('Testing Web Audio API...');
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const context = new AudioContext();
+                log('✓ Web Audio API available', 'success');
+                
+                // Test oscillator
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                gainNode.gain.value = 0.1;
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                oscillator.frequency.value = 440;
+                
+                document.getElementById('test-audio').onclick = async () => {
+                    if (context.state === 'suspended') {
+                        await context.resume();
+                    }
+                    oscillator.start();
+                    log('▶ Playing test tone (440Hz)', 'success');
+                    setTimeout(() => {
+                        oscillator.stop();
+                        log('⏸ Test tone stopped', 'success');
+                    }, 500);
+                };
+                
+                setStatus('audio-status', 'Web Audio API working', 'pass');
+            } catch (error) {
+                log(`✗ Audio test failed: ${error.message}`, 'error');
+                setStatus('audio-status', 'Audio API failed', 'fail');
+            }
+        }
+
+        async function testWebGL() {
+            log('Testing WebGL...');
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+                if (gl) {
+                    const version = gl.getParameter(gl.VERSION);
+                    log(`✓ WebGL available: ${version}`, 'success');
+                    setStatus('webgl-status', `WebGL working (${version})`, 'pass');
+                } else {
+                    log('✗ WebGL not available', 'error');
+                    setStatus('webgl-status', 'WebGL not available', 'fail');
+                }
+            } catch (error) {
+                log(`✗ WebGL test failed: ${error.message}`, 'error');
+                setStatus('webgl-status', 'WebGL test failed', 'fail');
+            }
+        }
+
+        async function testHandTracking() {
+            log('Testing Hand Tracking API...');
+            if ('xr' in navigator) {
+                try {
+                    // Hand tracking is part of WebXR
+                    log('⚠ Hand tracking requires Quest 3 and active XR session');
+                    setStatus('handtracking-status', 'Requires active XR session on Quest 3', 'info');
+                } catch (error) {
+                    log(`⚠ Hand tracking check failed: ${error.message}`);
+                    setStatus('handtracking-status', 'Check failed', 'info');
+                }
+            } else {
+                log('⚠ WebXR not available (hand tracking unavailable)');
+                setStatus('handtracking-status', 'Not available (desktop mode uses mouse)', 'info');
+            }
+        }
+
+        async function runAllTests() {
+            log('=== Starting feature tests ===');
+            await testModules();
+            await testWebXR();
+            await testAudio();
+            await testWebGL();
+            await testHandTracking();
+            log('=== Tests complete ===', 'success');
+        }
+
+        // Run tests on load
+        window.addEventListener('DOMContentLoaded', runAllTests);
+        window.runAllTests = runAllTests;
+    </script>
+</body>
+</html>

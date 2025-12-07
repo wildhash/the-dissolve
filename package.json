@@ -1,0 +1,20 @@
+{
+  "name": "the-dissolve",
+  "version": "1.0.0",
+  "description": "Quest 3 MR psychedelic experience using AI+passthrough+hand tracking",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["webxr", "quest3", "mixed-reality", "hand-tracking"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dissolve - Quest 3 MR Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        #warning-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 40px;
+        }
+        #warning-screen.hidden {
+            display: none;
+        }
+        .warning-content {
+            max-width: 600px;
+            text-align: center;
+        }
+        .warning-content h1 {
+            color: #ff3333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .warning-content p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .warning-content ul {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 500px;
+            list-style-position: inside;
+        }
+        .warning-content li {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        #accept-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            background: #ff3333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s;
+        }
+        #accept-btn:hover {
+            background: #ff5555;
+        }
+        #app {
+            width: 100vw;
+            height: 100vh;
+        }
+        #controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        #controls h3 {
+            margin-bottom: 10px;
+            color: #ff3333;
+        }
+        #controls p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        #emergency-stop {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            padding: 20px 30px;
+            font-size: 1.5em;
+            background: #ff0000;
+            color: #fff;
+            border: 3px solid #fff;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+        #emergency-stop:hover {
+            background: #cc0000;
+        }
+        #phase-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="warning-screen">
+        <div class="warning-content">
+            <h1>⚠️ PHOTOSENSITIVITY WARNING ⚠️</h1>
+            <p><strong>DO NOT USE if you have a history of epilepsy or photosensitive seizures.</strong></p>
+            <p>This experience contains:</p>
+            <ul>
+                <li>Flashing lights and strobing effects (max 2Hz)</li>
+                <li>Rapid color changes and visual distortions</li>
+                <li>Binaural audio frequencies (4-40Hz)</li>
+                <li>Intense visual effects that may cause discomfort</li>
+            </ul>
+            <p>If you experience dizziness, nausea, disorientation, or discomfort, <strong>STOP IMMEDIATELY</strong> and press the emergency stop button.</p>
+            <p>This is a psychedelic visual experience for entertainment purposes only.</p>
+            <p><strong>By clicking "I UNDERSTAND", you acknowledge these risks and agree to proceed at your own risk.</strong></p>
+            <button id="accept-btn">I UNDERSTAND</button>
+        </div>
+    </div>
+
+    <div id="app"></div>
+    
+    <button id="emergency-stop">EMERGENCY STOP</button>
+    
+    <div id="controls">
+        <h3>Controls</h3>
+        <p id="vr-controls">🖐️ Pinch: Intensity control</p>
+        <p id="vr-controls2">✋ Open palm: Spread distortion</p>
+        <p id="vr-controls3">👉 Point: Direction control</p>
+        <p id="vr-controls4">⏸️ Both hands together: Pause</p>
+        <p id="demo-controls" style="display: none;">🖱️ Left click: Intensity</p>
+        <p id="demo-controls2" style="display: none;">🖱️ Right click: Spread</p>
+        <p id="demo-controls3" style="display: none;">🖱️ Move: Direction</p>
+    </div>
+
+    <div id="phase-indicator">
+        Phase: <span id="phase-text">ONSET</span>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
