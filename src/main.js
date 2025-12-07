@@ -22,6 +22,8 @@ class TheDissolve {
         this.handTrails = [];
         this.emergencyStop = false;
         this.demoMode = false;
+        this.lastCleanupTime = 0;
+        this.cleanupInterval = 500; // Cleanup every 500ms instead of every frame
     }
 
     async init() {
@@ -280,9 +282,18 @@ class TheDissolve {
             this.handTrails.push(particle);
         });
 
-        // Clean up old trails
+        // Efficient cleanup - only run periodically
+        const now = Date.now();
+        if (now - this.lastCleanupTime > this.cleanupInterval) {
+            this.lastCleanupTime = now;
+            this.cleanupHandTrails();
+        }
+    }
+
+    cleanupHandTrails() {
+        const now = Date.now();
         this.handTrails = this.handTrails.filter(trail => {
-            const age = Date.now() - trail.userData.createdAt;
+            const age = now - trail.userData.createdAt;
             if (age > trail.userData.lifetime) {
                 this.scene.remove(trail);
                 trail.geometry.dispose();

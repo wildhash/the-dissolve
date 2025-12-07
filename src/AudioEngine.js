@@ -1,7 +1,7 @@
 export class AudioEngine {
     constructor() {
         this.audioContext = null;
-        this.binauralOscillators = [];
+        this.binauralOscillators = null;
         this.shepardToneOscillators = [];
         this.masterGain = null;
         this.isPlaying = false;
@@ -32,24 +32,25 @@ export class AudioEngine {
     stop() {
         if (!this.isPlaying) return;
 
-        // Stop all oscillators
-        this.binauralOscillators.forEach(osc => {
+        // Stop binaural oscillators
+        if (this.binauralOscillators) {
             try {
-                osc.stop();
+                this.binauralOscillators.left.stop();
+                this.binauralOscillators.right.stop();
+            } catch (e) {
+                // Already stopped
+            }
+            this.binauralOscillators = null;
+        }
+
+        // Stop Shepard tone oscillators
+        this.shepardToneOscillators.forEach(tone => {
+            try {
+                tone.oscillator.stop();
             } catch (e) {
                 // Already stopped
             }
         });
-
-        this.shepardToneOscillators.forEach(osc => {
-            try {
-                osc.stop();
-            } catch (e) {
-                // Already stopped
-            }
-        });
-
-        this.binauralOscillators = [];
         this.shepardToneOscillators = [];
 
         if (this.audioContext) {
@@ -97,11 +98,13 @@ export class AudioEngine {
         leftOsc.start();
         rightOsc.start();
 
-        this.binauralOscillators.push(leftOsc, rightOsc);
-        this.binauralOscillators.leftGain = leftGain;
-        this.binauralOscillators.rightGain = rightGain;
-        this.binauralOscillators.leftOsc = leftOsc;
-        this.binauralOscillators.rightOsc = rightOsc;
+        // Store references properly
+        this.binauralOscillators = {
+            left: leftOsc,
+            right: rightOsc,
+            leftGain: leftGain,
+            rightGain: rightGain
+        };
     }
 
     startShepardTones() {
@@ -163,8 +166,8 @@ export class AudioEngine {
         this.currentFrequency += (targetFrequency - this.currentFrequency) * 0.01;
 
         // Update binaural beat
-        if (this.binauralOscillators.rightOsc) {
-            this.binauralOscillators.rightOsc.frequency.value = 200 + this.currentFrequency;
+        if (this.binauralOscillators && this.binauralOscillators.right) {
+            this.binauralOscillators.right.frequency.value = 200 + this.currentFrequency;
         }
 
         // Update Shepard tones - create rising/falling effect
