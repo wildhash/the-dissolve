@@ -8,11 +8,16 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": ["webxr", "quest3", "mixed-reality", "hand-tracking"],
+  "keywords": [
+    "webxr",
+    "quest3",
+    "mixed-reality",
+    "hand-tracking"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^7.2.7"
   },
   "dependencies": {
     "three": "^0.160.0"

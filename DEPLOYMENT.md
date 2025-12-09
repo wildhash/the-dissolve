@@ -4,8 +4,8 @@
 
 ### Prerequisites
 - Meta Quest 3 with latest firmware
-- Developer mode enabled on Quest 3
-- Meta Quest Developer account
+- Developer mode enabled on Quest 3 (for local development)
+- Modern browser with WebXR support (Quest Browser recommended)
 
 ### Option 1: Local Development Server
 
@@ -30,21 +30,29 @@
 
 #### Using Netlify
 
-1. **Build the project**:
-   ```bash
-   npm run build
-   ```
+**Automated deployment is configured!**
 
-2. **Deploy to Netlify**:
-   ```bash
-   npm install -g netlify-cli
-   netlify deploy --prod --dir=dist
-   ```
+A `netlify.toml` configuration file is included with optimized settings:
+- Automatic builds from Git
+- Security headers
+- HTTPS by default
+- Optimized for WebXR
 
-3. **Access from Quest 3**:
-   - Open Quest Browser
-   - Navigate to your Netlify URL
-   - Bookmark for easy access
+To deploy:
+1. Connect your GitHub repository to Netlify
+2. Netlify will automatically detect the configuration
+3. Each push triggers a new deployment
+
+Or use the CLI:
+```bash
+npm install -g netlify-cli
+netlify deploy --prod --dir=dist
+```
+
+Access from Quest 3:
+- Open Quest Browser
+- Navigate to your Netlify URL
+- Bookmark for easy access
 
 #### Using Vercel
 
@@ -64,14 +72,19 @@
 
 #### Using GitHub Pages
 
-1. **Update vite.config.js** with your base path:
-   ```javascript
-   export default defineConfig({
-     base: '/the-dissolve/',
-     // ... rest of config
-   });
-   ```
+**Automated deployment is configured!** 
 
+When you push to the `main` branch, GitHub Actions will automatically:
+- Build the project
+- Deploy to GitHub Pages
+
+To enable:
+1. Go to repository Settings > Pages
+2. Select "GitHub Actions" as the source
+3. The workflow will run automatically on push
+
+Manual deployment (if needed):
+1. **Update vite.config.js** with your base path if using a subdirectory
 2. **Build and deploy**:
    ```bash
    npm run build
@@ -81,11 +94,6 @@
    git commit -m 'deploy'
    git push -f git@github.com:username/the-dissolve.git main:gh-pages
    ```
-
-3. **Enable GitHub Pages**:
-   - Go to repository Settings > Pages
-   - Select `gh-pages` branch
-   - Save
 
 ### Option 3: SideQuest / App Lab
 

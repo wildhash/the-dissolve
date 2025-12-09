@@ -46,8 +46,9 @@ If you experience dizziness, nausea, disorientation, or discomfort, **STOP IMMED
 ### Prerequisites
 
 - Meta Quest 3 with latest firmware
-- Developer mode enabled
-- USB-C cable for development
+- Developer mode enabled (for local development)
+- Modern web browser with WebXR support
+- Node.js 20+ and npm
 
 ### Installation
 
@@ -61,7 +62,7 @@ npm install
 npm run dev
 ```
 
-Then connect your Quest 3 via USB and enable USB debugging. Navigate to your computer's IP address on port 3000 using the Quest browser.
+Then connect your Quest 3 to the same WiFi network and navigate to your computer's IP address on port 3000 using the Quest browser.
 
 **Note**: HTTPS is required for WebXR. The dev server runs with self-signed certificates.
 
@@ -73,15 +74,22 @@ npm run build
 
 ### Deployment
 
-The built files in `dist/` can be hosted on any HTTPS server. For Quest 3 deployment, upload to a web server accessible from the headset.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
+
+Quick options:
+- **GitHub Pages**: Automated deployment via GitHub Actions (configured)
+- **Netlify**: One-click deployment with `netlify.toml` configuration included
+- **Vercel**: Deploy with `vercel --prod`
+- **Local**: Serve `dist/` folder over HTTPS
 
 ## Technical Details
 
-- Built with Three.js for 3D rendering
-- WebXR API for VR/MR support
-- Hand Tracking API for gesture recognition
-- Web Audio API for binaural beats and Shepard tones
-- Custom GLSL shaders for visual effects
+- **Framework**: Three.js v0.160.0 for 3D rendering
+- **Build Tool**: Vite v7.2.7 (latest, secure)
+- **APIs**: WebXR Device API, WebXR Hand Input, Web Audio API
+- **Rendering**: WebGL with custom GLSL shaders
+- **Target Platform**: Meta Quest 3 (WebXR-enabled browsers)
+- **Security**: Zero known vulnerabilities, modern security headers configured
 
 ## Controls
 
@@ -93,7 +101,9 @@ The built files in `dist/` can be hosted on any HTTPS server. For Quest 3 deploy
 
 ## Built For
 
-Meta Hackathon - Exploring the intersection of XR, AI, and altered states of consciousness
+Meta Horizon Creator Competition - Exploring the intersection of XR, AI, and altered states of consciousness.
+
+This is a **WebXR-based** experience accessible through any WebXR-compatible browser on Quest 3.
 
 ## License
 
