@@ -1,6 +1,8 @@
 # The Dissolve
 
-Quest 3 MR psychedelic experience using AI+passthrough+hand tracking
+Quest 3 MR psychedelic experience using WebXR + passthrough + hand tracking
+
+> **Important**: This is a WebXR-based web application, not a Unity project. See [BUILD.md](BUILD.md) for complete build instructions.
 
 ## ⚠️ PHOTOSENSITIVITY WARNING ⚠️
 
@@ -43,12 +45,16 @@ If you experience dizziness, nausea, disorientation, or discomfort, **STOP IMMED
 
 ## Setup
 
+For complete build and deployment instructions, see **[BUILD.md](BUILD.md)**.
+
+### Quick Start
+
 ### Prerequisites
 
 - Meta Quest 3 with latest firmware
 - Developer mode enabled (for local development)
 - Modern web browser with WebXR support
-- Node.js 20+ and npm
+- Node.js 22+ and npm
 
 ### Installation
 
@@ -74,13 +80,20 @@ npm run build
 
 ### Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
+See **[BUILD.md](BUILD.md)** and **[DEPLOYMENT.md](DEPLOYMENT.md)** for detailed instructions.
 
 Quick options:
 - **GitHub Pages**: Automated deployment via GitHub Actions (configured)
 - **Netlify**: One-click deployment with `netlify.toml` configuration included
 - **Vercel**: Deploy with `vercel --prod`
 - **Local**: Serve `dist/` folder over HTTPS
+
+## Documentation
+
+- **[BUILD.md](BUILD.md)** - Complete build instructions and troubleshooting
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment options and hosting setup
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
 
 ## Technical Details
 
